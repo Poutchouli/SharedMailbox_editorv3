@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  shared-mailbox-manager:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: shared-mailbox-manager
+    ports:
+      - "17652:80"
+    restart: unless-stopped
+    environment:
+      - NGINX_HOST=localhost
+      - NGINX_PORT=80
+    volumes:
+      # Optional: Mount logs for debugging
+      - ./logs:/var/log/nginx
+    networks:
+      - mailbox-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.mailbox-manager.rule=Host(`localhost`)"
+      - "traefik.http.services.mailbox-manager.loadbalancer.server.port=80"
+
+networks:
+  mailbox-network:
+    driver: bridge
+
+volumes:
+  nginx-logs:

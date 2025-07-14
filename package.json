@@ -1,0 +1,48 @@
+{
+  "name": "shared-mailbox-manager",
+  "version": "1.0.0",
+  "description": "A web-based tool for managing Microsoft Exchange shared mailbox access permissions",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx http-server . -p 8000 -o",
+    "dev": "npx http-server . -p 8000 -o -c-1",
+    "lint": "npx eslint js/",
+    "format": "npx prettier --write .",
+    "docker:build": "docker build -t shared-mailbox-manager .",
+    "docker:run": "docker run -d --name shared-mailbox-manager -p 17652:80 shared-mailbox-manager",
+    "docker:stop": "docker stop shared-mailbox-manager",
+    "docker:start": "docker start shared-mailbox-manager",
+    "docker:logs": "docker logs -f shared-mailbox-manager",
+    "docker:clean": "docker stop shared-mailbox-manager && docker rm shared-mailbox-manager && docker rmi shared-mailbox-manager",
+    "compose:up": "docker-compose up -d",
+    "compose:down": "docker-compose down",
+    "compose:logs": "docker-compose logs -f"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Poutchouli/SharedMailbox_editorv3.git"
+  },
+  "keywords": [
+    "microsoft-exchange",
+    "shared-mailbox",
+    "permissions",
+    "csv",
+    "web-app",
+    "javascript"
+  ],
+  "author": "Poutchouli",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^8.0.0",
+    "prettier": "^3.0.0",
+    "http-server": "^14.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ],
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

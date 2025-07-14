@@ -4,65 +4,68 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shared Mailbox Manager</title>
+    <meta name="description" content="A web-based tool for managing Microsoft Exchange shared mailbox access permissions">
+    <meta name="author" content="Poutchouli">
+    
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
     <!-- Inter Font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6; /* Light gray background */
-        }
-        /* Custom scrollbar for the table container */
-        .scrollable-table-container::-webkit-scrollbar {
-            width: 8px;
-        }
-        .scrollable-table-container::-webkit-scrollbar-track {
-            background: #e0e0e0;
-            border-radius: 10px;
-        }
-        .scrollable-table-container::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 10px;
-        }
-        .scrollable-table-container::-webkit-scrollbar-thumb:hover {
-            background: #555;
-        }
-    </style>
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body class="min-h-screen flex flex-col items-center py-8 px-4">
-    <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-4xl">
-        <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">Shared Mailbox Manager</h1>
+    <div class="container-main bg-white p-8 rounded-xl shadow-lg w-full max-w-4xl">
+        <header class="mb-6">
+            <h1 class="header-title text-3xl font-bold text-gray-800 mb-2 text-center">Shared Mailbox Manager</h1>
+            <p class="text-center text-gray-600 text-sm">Manage Microsoft Exchange shared mailbox access permissions</p>
+        </header>
 
         <!-- File Upload Section -->
-        <div class="mb-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
+        <section class="mb-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
             <label for="csvFile" class="block text-lg font-medium text-gray-700 mb-3">Upload Shared Mailbox CSV:</label>
-            <input type="file" id="csvFile" accept=".csv" class="block w-full text-sm text-gray-500
-                file:mr-4 file:py-2 file:px-4
-                file:rounded-full file:border-0
-                file:text-sm file:font-semibold
-                file:bg-blue-50 file:text-blue-700
-                hover:file:bg-blue-100 cursor-pointer">
-            <p class="mt-2 text-sm text-gray-500">Please upload a CSV file with "Identity";"User";"AccessRights" format.</p>
-        </div>
+            <input type="file" 
+                   id="csvFile" 
+                   accept=".csv" 
+                   class="file-input block w-full text-sm text-gray-500
+                          file:mr-4 file:py-2 file:px-4
+                          file:rounded-full file:border-0
+                          file:text-sm file:font-semibold
+                          file:bg-blue-50 file:text-blue-700
+                          hover:file:bg-blue-100 cursor-pointer">
+            <p class="mt-2 text-sm text-gray-500">
+                Please upload a CSV file with "Identity";"User";"AccessRights" format.
+            </p>
+        </section>
 
         <!-- Mailbox Display Section -->
-        <div id="mailboxContainer" class="hidden">
+        <section id="mailboxContainer" class="hidden">
             <h2 class="text-2xl font-semibold text-gray-800 mb-4">Manage Mailbox Access</h2>
 
             <!-- Search and Filter -->
             <div class="mb-6">
-                <input type="text" id="searchMailbox" placeholder="Search mailboxes..."
-                       class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <input type="text" 
+                       id="searchMailbox" 
+                       placeholder="Search mailboxes..."
+                       class="search-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
 
-            <div class="scrollable-table-container overflow-y-auto max-h-[60vh] rounded-lg border border-gray-200 shadow-sm">
+            <!-- Table Container -->
+            <div class="table-container scrollable-table-container overflow-y-auto max-h-[60vh] rounded-lg border border-gray-200 shadow-sm">
                 <table class="w-full table-fixed divide-y divide-gray-200">
                     <thead class="bg-gray-100 sticky top-0">
                         <tr>
-                            <th class="w-1/4 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider rounded-tl-lg">Shared Mailbox</th>
-                            <th class="w-3/5 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Users with FullAccess</th>
-                            <th class="w-1/6 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider rounded-tr-lg">Actions</th>
+                            <th class="table-header w-1/4 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider rounded-tl-lg">
+                                Shared Mailbox
+                            </th>
+                            <th class="table-header w-3/5 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Users with FullAccess
+                            </th>
+                            <th class="table-header w-1/6 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider rounded-tr-lg">
+                                Actions
+                            </th>
                         </tr>
                     </thead>
                     <tbody id="mailboxTableBody" class="bg-white divide-y divide-gray-200">
@@ -73,474 +76,28 @@
 
             <!-- Action Buttons -->
             <div class="mt-8 flex justify-center">
-                <button id="downloadChangesBtn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-full shadow-md transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
+                <button id="downloadChangesBtn" 
+                        class="btn-primary bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-full shadow-md transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
                     Terminé (Download Changes)
                 </button>
             </div>
-        </div>
+        </section>
 
         <!-- Message Box for alerts -->
-        <div id="messageBox" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50 hidden">
-            <div class="bg-white p-6 rounded-lg shadow-xl max-w-md w-full mx-4 text-center">
+        <div id="messageBox" class="message-box-overlay fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50 hidden">
+            <div class="message-box-content bg-white p-6 rounded-lg shadow-xl max-w-md w-full mx-4 text-center">
                 <p id="messageBoxText" class="text-sm font-semibold text-gray-800 mb-4 whitespace-pre-line text-left"></p>
-                <button id="messageBoxCloseBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out">
+                <button id="messageBoxCloseBtn" 
+                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out focus-visible:focus">
                     OK
                 </button>
             </div>
         </div>
-
     </div>
 
-    <script>
-        // Global variables to store original and current data
-        let originalMailboxData = new Map(); // Map<Identity, Set<User>>
-        let currentMailboxData = new Map(); // Map<Identity, Set<User>>
-
-        // DOM Elements
-        const csvFileInput = document.getElementById('csvFile');
-        const mailboxContainer = document.getElementById('mailboxContainer');
-        const mailboxTableBody = document.getElementById('mailboxTableBody');
-        const downloadChangesBtn = document.getElementById('downloadChangesBtn');
-        const searchMailboxInput = document.getElementById('searchMailbox');
-        const messageBox = document.getElementById('messageBox');
-        const messageBoxText = document.getElementById('messageBoxText');
-        const messageBoxCloseBtn = document.getElementById('messageBoxCloseBtn');
-
-        /**
-         * Displays a custom message box instead of alert().
-         * @param {string} message - The message to display.
-         */
-        function showMessageBox(message) {
-            messageBoxText.textContent = message;
-            messageBox.classList.remove('hidden');
-        }
-
-        /**
-         * Gets all unique users from the current mailbox data for autocomplete.
-         * @returns {Array<string>} Array of unique user emails.
-         */
-        function getAllUsers() {
-            const allUsers = new Set();
-            currentMailboxData.forEach((users) => {
-                users.forEach(user => allUsers.add(user));
-            });
-            return Array.from(allUsers).sort();
-        }
-
-        /**
-         * Gets all shared mailboxes that a specific user has access to.
-         * @param {string} user - The user email to check.
-         * @returns {Array<string>} Array of shared mailbox identities.
-         */
-        function getUserMailboxes(user) {
-            const userMailboxes = [];
-            currentMailboxData.forEach((users, identity) => {
-                if (users.has(user)) {
-                    userMailboxes.push(identity);
-                }
-            });
-            return userMailboxes.sort();
-        }
-
-        /**
-         * Checks if a user has reached the maximum number of shared mailboxes (7).
-         * @param {string} user - The user email to check.
-         * @returns {boolean} True if user has 7 or more mailboxes.
-         */
-        function hasMaxMailboxes(user) {
-            return getUserMailboxes(user).length >= 7;
-        }
-
-        /**
-         * Creates an autocomplete input field.
-         * @param {string} placeholder - Placeholder text for the input.
-         * @param {Array<string>} suggestions - Array of suggestion strings.
-         * @returns {Object} Object containing the input element and container.
-         */
-        function createAutocompleteInput(placeholder, suggestions) {
-            const container = document.createElement('div');
-            container.classList.add('relative');
-
-            const input = document.createElement('input');
-            input.type = 'email';
-            input.placeholder = placeholder;
-            input.classList.add('w-full', 'p-1', 'text-xs', 'border', 'border-gray-300', 'rounded', 'focus:outline-none', 'focus:ring-1', 'focus:ring-blue-500');
-
-            const dropdown = document.createElement('div');
-            dropdown.classList.add('absolute', 'top-full', 'left-0', 'right-0', 'bg-white', 'border', 'border-gray-300', 'rounded-b', 'shadow-lg', 'max-h-24', 'overflow-y-auto', 'z-10', 'hidden');
-
-            container.appendChild(input);
-            container.appendChild(dropdown);
-
-            let filteredSuggestions = [];
-
-            function updateDropdown(value) {
-                filteredSuggestions = suggestions.filter(suggestion => 
-                    suggestion.toLowerCase().includes(value.toLowerCase()) && 
-                    suggestion.toLowerCase() !== value.toLowerCase()
-                ).slice(0, 4); // Limit to 4 suggestions for more compact display
-
-                dropdown.innerHTML = '';
-                
-                if (filteredSuggestions.length > 0 && value.length > 0) {
-                    filteredSuggestions.forEach(suggestion => {
-                        const option = document.createElement('div');
-                        option.classList.add('px-2', 'py-1', 'text-xs', 'cursor-pointer', 'hover:bg-blue-100', 'truncate');
-                        option.textContent = suggestion;
-                        option.title = suggestion; // Show full email on hover
-                        option.addEventListener('click', () => {
-                            input.value = suggestion;
-                            dropdown.classList.add('hidden');
-                        });
-                        dropdown.appendChild(option);
-                    });
-                    dropdown.classList.remove('hidden');
-                } else {
-                    dropdown.classList.add('hidden');
-                }
-            }
-
-            input.addEventListener('input', (e) => {
-                updateDropdown(e.target.value);
-            });
-
-            input.addEventListener('focus', (e) => {
-                updateDropdown(e.target.value);
-            });
-
-            input.addEventListener('blur', (e) => {
-                // Delay hiding dropdown to allow click on options
-                setTimeout(() => {
-                    dropdown.classList.add('hidden');
-                }, 200);
-            });
-
-            input.addEventListener('keydown', (e) => {
-                const activeOption = dropdown.querySelector('.bg-blue-200');
-                
-                if (e.key === 'ArrowDown') {
-                    e.preventDefault();
-                    const options = dropdown.querySelectorAll('div');
-                    if (options.length > 0) {
-                        if (activeOption) {
-                            activeOption.classList.remove('bg-blue-200');
-                            const nextOption = activeOption.nextElementSibling || options[0];
-                            nextOption.classList.add('bg-blue-200');
-                        } else {
-                            options[0].classList.add('bg-blue-200');
-                        }
-                    }
-                } else if (e.key === 'ArrowUp') {
-                    e.preventDefault();
-                    const options = dropdown.querySelectorAll('div');
-                    if (options.length > 0) {
-                        if (activeOption) {
-                            activeOption.classList.remove('bg-blue-200');
-                            const prevOption = activeOption.previousElementSibling || options[options.length - 1];
-                            prevOption.classList.add('bg-blue-200');
-                        } else {
-                            options[options.length - 1].classList.add('bg-blue-200');
-                        }
-                    }
-                } else if (e.key === 'Enter') {
-                    e.preventDefault();
-                    if (activeOption) {
-                        input.value = activeOption.textContent;
-                        dropdown.classList.add('hidden');
-                    }
-                } else if (e.key === 'Escape') {
-                    dropdown.classList.add('hidden');
-                }
-            });
-
-            return { input, container };
-        }
-
-        // Close message box event listener
-        messageBoxCloseBtn.addEventListener('click', () => {
-            messageBox.classList.add('hidden');
-        });
-
-        /**
-         * Parses a CSV string into a structured data format.
-         * Expected format: "Identity";"User";"AccessRights"
-         * @param {string} csvText - The raw CSV content.
-         * @returns {Map<string, Set<string>>} A map where keys are mailbox identities and values are sets of users with FullAccess.
-         */
-        function parseCSV(csvText) {
-            const lines = csvText.trim().split('\n');
-            const data = new Map(); // Map<Identity, Set<User>>
-
-            // Skip header row
-            if (lines.length <= 1) {
-                showMessageBox("The CSV file appears to be empty or only contains headers.");
-                return data;
-            }
-
-            for (let i = 1; i < lines.length; i++) {
-                const line = lines[i].trim();
-                if (!line) continue; // Skip empty lines
-
-                // Split by semicolon, handling quoted fields
-                const parts = line.match(/(?:[^;"]+|"[^"]*")+/g);
-
-                if (!parts || parts.length < 3) {
-                    console.warn(`Skipping malformed CSV line: ${line}`);
-                    continue;
-                }
-
-                // Remove quotes from fields
-                const identity = parts[0].replace(/"/g, '');
-                const user = parts[1].replace(/"/g, '');
-                const accessRights = parts[2].replace(/"/g, '');
-
-                if (accessRights === 'FullAccess') {
-                    if (!data.has(identity)) {
-                        data.set(identity, new Set());
-                    }
-                    data.get(identity).add(user);
-                }
-            }
-            return data;
-        }
-
-        /**
-         * Renders the current mailbox data into the HTML table.
-         * @param {Map<string, Set<string>>} data - The mailbox data to render.
-         * @param {string} filterText - Optional text to filter mailboxes by identity.
-         */
-        function renderMailboxes(data, filterText = '') {
-            mailboxTableBody.innerHTML = ''; // Clear existing rows
-
-            const sortedIdentities = Array.from(data.keys()).sort();
-
-            sortedIdentities.forEach(identity => {
-                // Filter logic
-                if (filterText && !identity.toLowerCase().includes(filterText.toLowerCase())) {
-                    return;
-                }
-
-                const users = Array.from(data.get(identity)).sort(); // Sort users for consistent display
-
-                const row = document.createElement('tr');
-                row.classList.add('hover:bg-gray-50');
-
-                // Identity Cell
-                const identityCell = document.createElement('td');
-                identityCell.classList.add('px-3', 'py-3', 'text-xs', 'font-medium', 'text-gray-900', 'break-words', 'leading-tight');
-                identityCell.textContent = identity;
-                row.appendChild(identityCell);
-
-                // Users Cell
-                const usersCell = document.createElement('td');
-                usersCell.classList.add('px-3', 'py-3', 'text-xs', 'text-gray-500');
-
-                const userListDiv = document.createElement('div');
-                userListDiv.classList.add('flex', 'flex-wrap', 'gap-1', 'items-start');
-
-                users.forEach(user => {
-                    const userTag = document.createElement('div');
-                    userTag.classList.add('flex', 'items-center', 'px-1.5', 'py-0.5', 'rounded', 'text-xs', 'font-medium', 'bg-blue-100', 'text-blue-800', 'min-w-0');
-                    
-                    const userSpan = document.createElement('span');
-                    // Extract username part before @ for better space utilization
-                    const displayName = user.includes('@') ? user.split('@')[0] : user;
-                    userSpan.textContent = displayName;
-                    userSpan.classList.add('truncate', 'max-w-[80px]');
-                    userSpan.title = user; // Show full email on hover
-                    userTag.appendChild(userSpan);
-
-                    const removeBtn = document.createElement('button');
-                    removeBtn.classList.add('ml-1', 'text-blue-600', 'hover:text-blue-900', 'focus:outline-none', 'flex-shrink-0', 'w-3', 'h-3', 'flex', 'items-center', 'justify-center');
-                    removeBtn.innerHTML = '×';
-                    removeBtn.title = `Remove ${user}`;
-                    removeBtn.addEventListener('click', () => removeUser(identity, user));
-                    userTag.appendChild(removeBtn);
-
-                    userListDiv.appendChild(userTag);
-                });
-                usersCell.appendChild(userListDiv);
-                row.appendChild(usersCell);
-
-                // Actions Cell (Add User)
-                const actionsCell = document.createElement('td');
-                actionsCell.classList.add('px-3', 'py-3', 'text-xs', 'font-medium');
-
-                const addUserContainer = document.createElement('div');
-                addUserContainer.classList.add('space-y-1');
-
-                const allUsers = getAllUsers();
-                const autocompleteInput = createAutocompleteInput('User email', allUsers);
-                autocompleteInput.input.classList.remove('p-1');
-                autocompleteInput.input.classList.add('p-0.5', 'text-xs');
-                addUserContainer.appendChild(autocompleteInput.container);
-
-                const addBtn = document.createElement('button');
-                addBtn.classList.add('bg-blue-500', 'hover:bg-blue-600', 'text-white', 'text-xs', 'font-bold', 'py-0.5', 'px-1.5', 'rounded', 'transition', 'duration-200', 'ease-in-out', 'w-full');
-                addBtn.textContent = 'Add';
-                addBtn.addEventListener('click', () => {
-                    const newUser = autocompleteInput.input.value.trim();
-                    if (newUser) {
-                        addUser(identity, newUser);
-                        autocompleteInput.input.value = '';
-                    } else {
-                        showMessageBox("Please enter a user email to add.");
-                    }
-                });
-                addUserContainer.appendChild(addBtn);
-
-                actionsCell.appendChild(addUserContainer);
-                row.appendChild(actionsCell);
-
-                mailboxTableBody.appendChild(row);
-            });
-        }
-
-        /**
-         * Adds a user to a specific shared mailbox in the current data.
-         * @param {string} identity - The shared mailbox identity.
-         * @param {string} user - The user email to add.
-         */
-        function addUser(identity, user) {
-            if (!currentMailboxData.has(identity)) {
-                currentMailboxData.set(identity, new Set());
-            }
-            if (currentMailboxData.get(identity).has(user)) {
-                showMessageBox(`User "${user}" already has FullAccess to "${identity}".`);
-                return;
-            }
-            
-            // Check if user already has 7 or more shared mailboxes
-            if (hasMaxMailboxes(user)) {
-                const userMailboxes = getUserMailboxes(user);
-                const mailboxList = userMailboxes.map(mailbox => `• ${mailbox}`).join('\n');
-                showMessageBox(`Cannot add user "${user}" to another shared mailbox. User already has access to ${userMailboxes.length} shared mailboxes (maximum is 7).\n\nCurrent mailboxes:\n${mailboxList}`);
-                return;
-            }
-            
-            currentMailboxData.get(identity).add(user);
-            renderMailboxes(currentMailboxData, searchMailboxInput.value); // Re-render to reflect changes
-        }
-
-        /**
-         * Removes a user from a specific shared mailbox in the current data.
-         * @param {string} identity - The shared mailbox identity.
-         * @param {string} user - The user email to remove.
-         */
-        function removeUser(identity, user) {
-            if (currentMailboxData.has(identity)) {
-                currentMailboxData.get(identity).delete(user);
-                // If the set becomes empty, we can optionally remove the identity from the map
-                if (currentMailboxData.get(identity).size === 0) {
-                    currentMailboxData.delete(identity);
-                }
-                renderMailboxes(currentMailboxData, searchMailboxInput.value); // Re-render to reflect changes
-            }
-        }
-
-        /**
-         * Generates the changes CSV based on original and current mailbox data.
-         * @returns {string} The CSV content for changes.
-         */
-        function generateChangesCSV() {
-            const changes = [];
-            const header = `"Identity";"User";"AccessRights";"Action"`;
-            changes.push(header);
-
-            // Track removals
-            originalMailboxData.forEach((originalUsers, identity) => {
-                const currentUsers = currentMailboxData.get(identity) || new Set();
-                originalUsers.forEach(user => {
-                    if (!currentUsers.has(user)) {
-                        changes.push(`"${identity}";"${user}";"FullAccess";"Remove"`);
-                    }
-                });
-            });
-
-            // Track additions
-            currentMailboxData.forEach((currentUsers, identity) => {
-                const originalUsers = originalMailboxData.get(identity) || new Set();
-                currentUsers.forEach(user => {
-                    if (!originalUsers.has(user)) {
-                        changes.push(`"${identity}";"${user}";"FullAccess";"Add"`);
-                    }
-                });
-            });
-
-            if (changes.length === 1) { // Only header means no changes
-                return null;
-            }
-            return changes.join('\n');
-        }
-
-        /**
-         * Handles the CSV file upload.
-         */
-        csvFileInput.addEventListener('change', (event) => {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    try {
-                        const csvText = e.target.result;
-                        originalMailboxData = parseCSV(csvText);
-                        // Create a deep copy for current data to track changes
-                        currentMailboxData = new Map();
-                        originalMailboxData.forEach((users, identity) => {
-                            currentMailboxData.set(identity, new Set(users));
-                        });
-
-                        if (originalMailboxData.size > 0) {
-                            renderMailboxes(currentMailboxData);
-                            mailboxContainer.classList.remove('hidden'); // Show the management section
-                            showMessageBox("CSV loaded successfully! You can now manage mailbox access.");
-                        } else {
-                            mailboxContainer.classList.add('hidden');
-                            showMessageBox("No 'FullAccess' entries found or CSV is empty after parsing.");
-                        }
-                    } catch (error) {
-                        console.error("Error parsing CSV:", error);
-                        showMessageBox("Error parsing CSV file. Please ensure it's correctly formatted.");
-                    }
-                };
-                reader.readAsText(file);
-            } else {
-                mailboxContainer.classList.add('hidden');
-                showMessageBox("Please select a CSV file.");
-            }
-        });
-
-        /**
-         * Handles the "Download Changes" button click.
-         */
-        downloadChangesBtn.addEventListener('click', () => {
-            const changesCSV = generateChangesCSV();
-            if (changesCSV) {
-                const blob = new Blob([changesCSV], { type: 'text/csv;charset=utf-8;' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'mailbox_changes.csv';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-                showMessageBox("Changes CSV downloaded successfully!");
-            } else {
-                showMessageBox("No changes detected to download.");
-            }
-        });
-
-        /**
-         * Handles mailbox search/filter input.
-         */
-        searchMailboxInput.addEventListener('input', (event) => {
-            const filterText = event.target.value;
-            renderMailboxes(currentMailboxData, filterText);
-        });
-
-        // Initial state: hide mailbox container until CSV is loaded
-        mailboxContainer.classList.add('hidden');
-    </script>
+    <!-- JavaScript Modules -->
+    <script src="js/csv-parser.js"></script>
+    <script src="js/ui-components.js"></script>
+    <script src="js/app.js"></script>
 </body>
 </html>
