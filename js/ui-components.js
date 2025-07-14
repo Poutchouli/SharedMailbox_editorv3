@@ -19,8 +19,7 @@ function createAutocompleteInput(placeholder, suggestions) {
     input.classList.add('w-full', 'p-1', 'text-xs', 'border', 'border-gray-300', 'rounded', 'focus:outline-none', 'focus:ring-1', 'focus:ring-blue-500');
 
     const dropdown = document.createElement('div');
-    dropdown.classList.add('autocomplete-dropdown', 'absolute', 'top-full', 'left-0', 'right-0', 'bg-white', 'border', 'border-gray-300', 'rounded-b', 'shadow-lg', 'max-h-24', 'overflow-y-auto', 'hidden');
-    dropdown.style.zIndex = '1000'; // Ensure it appears above table elements
+    dropdown.classList.add('autocomplete-dropdown', 'absolute', 'top-full', 'left-0', 'right-0', 'bg-white', 'border', 'border-gray-300', 'rounded-b', 'shadow-lg', 'max-h-24', 'overflow-y-auto', 'z-10', 'hidden');
 
     container.appendChild(input);
     container.appendChild(dropdown);
@@ -236,10 +235,10 @@ function createMailboxRow(identity, users, onAddUser, onRemoveUser) {
 
     // Actions Cell (Add User)
     const actionsCell = document.createElement('td');
-    actionsCell.classList.add('table-cell-autocomplete', 'px-3', 'py-3', 'text-xs', 'font-medium');
+    actionsCell.classList.add('px-3', 'py-3', 'text-xs', 'font-medium');
 
     const addUserContainer = document.createElement('div');
-    addUserContainer.classList.add('table-input-container', 'space-y-1');
+    addUserContainer.classList.add('space-y-1');
 
     const allUsers = getAllUsers();
     const autocompleteInput = createAutocompleteInput('User email', allUsers);
